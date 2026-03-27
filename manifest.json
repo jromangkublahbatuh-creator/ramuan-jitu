@@ -1,0 +1,62 @@
+{
+  "name": "Ramuan Jitu Anti Kacuak",
+  "short_name": "Ramuan Jitu",
+  "description": "Aplikasi web untuk generate angka acak 2D, 3D, 4D dengan fitur betting dan tracking hasil keluaran",
+  "start_url": "/index.html",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#ffffff",
+  "theme_color": "#667eea",
+  "categories": ["productivity", "utilities"],
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%23667eea' width='192' height='192'/><text x='50%' y='50%' font-size='80' font-weight='bold' fill='white' text-anchor='middle' dy='.3em'>🎰</text></svg>",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect fill='%23667eea' width='512' height='512'/><text x='50%' y='50%' font-size='280' font-weight='bold' fill='white' text-anchor='middle' dy='.3em'>🎰</text></svg>",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 540 720'><rect fill='%23667eea' width='540' height='720'/><text x='50%' y='50%' font-size='120' font-weight='bold' fill='white' text-anchor='middle' dy='.3em'>Generator Angka 🎰</text></svg>",
+      "sizes": "540x720",
+      "type": "image/svg+xml",
+      "form_factor": "narrow"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Generator 234D",
+      "short_name": "Generator",
+      "description": "Buat kombinasi angka 2D, 3D, 4D",
+      "url": "/index.html?tab=generator",
+      "icons": [
+        {
+          "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'><rect fill='%23667eea' width='96' height='96'/><text x='50%' y='50%' font-size='48' font-weight='bold' fill='white' text-anchor='middle' dy='.3em'>🎲</text></svg>",
+          "sizes": "96x96",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
+      "name": "Halaman Betting",
+      "short_name": "Betting",
+      "description": "Pasang bet dan tracking nominal",
+      "url": "/halaman-betting.html",
+      "icons": [
+        {
+          "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'><rect fill='%23667eea' width='96' height='96'/><text x='50%' y='50%' font-size='48' font-weight='bold' fill='white' text-anchor='middle' dy='.3em'>💰</text></svg>",
+          "sizes": "96x96",
+          "type": "image/svg+xml"
+        }
+      ]
+    }
+  ]
+}

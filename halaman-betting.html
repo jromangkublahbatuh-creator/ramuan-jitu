@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Halaman betting untuk Ramuan Jitu - fitur pasang bet dan tracking nominal">
+    <meta name="theme-color" content="#667eea">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Ramuan Jitu">
+    <title>Halaman Betting - Ramuan Jitu Anti Kacuak</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%23667eea' width='192' height='192'/><text x='50%' y='50%' font-size='80' font-weight='bold' fill='white' text-anchor='middle' dy='.3em'>🎰</text></svg>">
+    <style>
+        .betting-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .betting-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .betting-header h1 {
+            font-size: 2.5em;
+            margin: 0 0 10px 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .betting-header p {
+            margin: 5px 0;
+            color: #666;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(102, 126, 234, 0.1);
+        }
+
+        .result-card h3 {
+            margin: 0 0 15px 0;
+            color: #667eea;
+            font-size: 1.2em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .result-numbers {
+            background: white;
+            border: 2px dashed #667eea;
+            border-radius: 8px;
+            padding: 15px;
+            max-height: 300px;
+            overflow-y: auto;
+            word-break: break-all;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            line-height: 1.8;
+            color: #333;
+        }
+
+        .result-numbers::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .result-numbers::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .result-numbers::-webkit-scrollbar-thumb {
+            background: #667eea;
+            border-radius: 10px;
+        }
+
+        .result-count {
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #999;
+            font-weight: bold;
+        }
+
+        .input-section {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+
+        .input-section h2 {
+            margin-top: 0;
+            color: #333;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+            font-size: 1.1em;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            font-size: 1em;
+            font-family: 'Courier New', monospace;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #764ba2;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            background-color: #fafbff;
+        }
+
+        .betting-info {
+            background: #e8f4f8;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            color: #333;
+        }
+
+        .betting-info strong {
+            color: #667eea;
+        }
+
+        .button-group-betting {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn-betting {
+            padding: 12px 30px;
+            font-size: 1em;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            flex-grow: 1;
+            min-width: 150px;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-back {
+            background: #999;
+            color: white;
+            min-width: 150px;
+        }
+
+        .btn-back:hover {
+            background: #777;
+            transform: translateY(-2px);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            background: #f5f7fa;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .empty-state h2 {
+            color: #999;
+            margin-bottom: 15px;
+        }
+
+        .empty-state p {
+            color: #999;
+            margin-bottom: 20px;
+        }
+
+        .bet-section {
+            background: linear-gradient(135deg, #fff9e6 0%, #ffe8cc 100%);
+            border: 2px solid #ffc107;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .bet-section h3 {
+            margin-top: 0;
+            color: #ff8c00;
+            font-size: 1.3em;
+            border-bottom: 2px solid #ffc107;
+            padding-bottom: 10px;
+        }
+
+        .bet-row {
+            display: grid;
+            grid-template-columns: 1fr 200px;
+            gap: 15px;
+            margin-bottom: 15px;
+            align-items: center;
+        }
+
+        .bet-label {
+            font-weight: bold;
+            color: #333;
+            font-size: 1.1em;
+        }
+
+        .bet-input-group input {
+            width: 100%;
+            padding: 10px 15px;
+            border: 2px solid #ffc107;
+            border-radius: 8px;
+            font-size: 1em;
+            font-family: 'Courier New', monospace;
+            box-sizing: border-box;
+        }
+
+        .bet-input-group input:focus {
+            outline: none;
+            border-color: #ff8c00;
+            box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.1);
+            background-color: #fffef5;
+        }
+
+        .bet-output {
+            background: white;
+            border: 2px solid #ffc107;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            max-height: 200px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            word-break: break-all;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .bet-output:empty::before {
+            content: "Betting data akan muncul di sini...";
+            color: #999;
+        }
+
+        .bet-summary {
+            background: linear-gradient(135deg, #e8f4f8 0%, #fef8e7 100%);
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 15px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .bet-summary h4 {
+            margin: 0 0 15px 0;
+            color: #667eea;
+            font-size: 1.1em;
+        }
+
+        .bet-summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #ddd;
+            color: #333;
+        }
+
+        .bet-summary-row:last-child {
+            border-bottom: none;
+        }
+
+        .bet-summary-label {
+            font-weight: bold;
+        }
+
+        .bet-summary-value {
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .bet-summary-total {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            margin-top: 10px;
+            border-top: 2px solid #667eea;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .bet-summary-total-label {
+            color: #333;
+        }
+
+        .bet-summary-total-value {
+            color: #11998e;
+        }
+
+        @media (max-width: 768px) {
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .button-group-betting {
+                flex-direction: column;
+            }
+
+            .betting-header h1 {
+                font-size: 1.8em;
+            }
+
+            .input-section {
+                padding: 15px;
+            }
+
+            .bet-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="betting-container">
+            <div class="betting-header">
+                <h1>💰 Halaman Betting</h1>
+                <p>Racik 234D - Verifikasi dan Pasang Angka</p>
+            </div>
+
+            <!-- Hasil Kombinasi -->
+            <div class="results-grid" id="resultsGrid">
+                <!-- Tidak ada hasil -->
+            </div>
+
+            <!-- Form Input -->
+            <div class="input-section">
+                <h2>📝 Data Betting</h2>
+                
+                <div class="betting-info">
+                    <strong>ℹ️ Info:</strong> Pilih jenis bet terlebih dahulu (2D, 3D, 4D), lalu masukkan nominal untuk setiap jenis yang dipilih.
+                </div>
+
+                <!-- Bet Type Selection -->
+                <div style="background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%); border: 2px solid #667eea; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
+                    <h3 style="margin-top: 0; color: #667eea; border-bottom: 2px solid #667eea; padding-bottom: 10px;">🎯 Pilih Jenis Bet</h3>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px;">
+                        <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 12px; background: white; border-radius: 8px; border: 2px solid #ddd; transition: all 0.3s ease;">
+                            <input type="checkbox" id="checkBet2D" class="bet-checkbox" value="2D" checked style="width: 20px; height: 20px; cursor: pointer;">
+                            <span style="font-weight: bold; color: #333; flex: 1;">2D (00-99)</span>
+                        </label>
+                        
+                        <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 12px; background: white; border-radius: 8px; border: 2px solid #ddd; transition: all 0.3s ease;">
+                            <input type="checkbox" id="checkBet3D" class="bet-checkbox" value="3D" checked style="width: 20px; height: 20px; cursor: pointer;">
+                            <span style="font-weight: bold; color: #333; flex: 1;">3D (000-999)</span>
+                        </label>
+                        
+                        <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 12px; background: white; border-radius: 8px; border: 2px solid #ddd; transition: all 0.3s ease;">
+                            <input type="checkbox" id="checkBet4D" class="bet-checkbox" value="4D" checked style="width: 20px; height: 20px; cursor: pointer;">
+                            <span style="font-weight: bold; color: #333; flex: 1;">4D (0000-9999)</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Bet Section -->
+                <div class="bet-section">
+                    <h3>💵 Bet - Nominal per Jenis</h3>
+                    
+                    <div class="bet-row" id="row2D">
+                        <label class="bet-label">2D Nominal (Rp)</label>
+                        <div class="bet-input-group">
+                            <input type="number" id="bet2D" placeholder="Contoh: 1000" min="0" value="1000">
+                        </div>
+                    </div>
+
+                    <div class="bet-row" id="row3D">
+                        <label class="bet-label">3D Nominal (Rp)</label>
+                        <div class="bet-input-group">
+                            <input type="number" id="bet3D" placeholder="Contoh: 2000" min="0" value="2000">
+                        </div>
+                    </div>
+
+                    <div class="bet-row" id="row4D">
+                        <label class="bet-label">4D Nominal (Rp)</label>
+                        <div class="bet-input-group">
+                            <input type="number" id="bet4D" placeholder="Contoh: 1000" min="0" value="1000">
+                        </div>
+                    </div>
+
+                    <h3 style="margin-top: 25px; margin-bottom: 15px;">📊 Betting Data Output</h3>
+                    <div class="bet-output" id="betOutput"></div>
+
+                    <div class="bet-summary">
+                        <h4>💰 Total Biaya</h4>
+                        <div class="bet-summary-row">
+                            <span class="bet-summary-label">2D:</span>
+                            <span class="bet-summary-value" id="summary2D">0 × 0 = Rp 0</span>
+                        </div>
+                        <div class="bet-summary-row">
+                            <span class="bet-summary-label">3D:</span>
+                            <span class="bet-summary-value" id="summary3D">0 × 0 = Rp 0</span>
+                        </div>
+                        <div class="bet-summary-row">
+                            <span class="bet-summary-label">4D:</span>
+                            <span class="bet-summary-value" id="summary4D">0 × 0 = Rp 0</span>
+                        </div>
+                        <div class="bet-summary-total">
+                            <span class="bet-summary-total-label">Total:</span>
+                            <span class="bet-summary-total-value" id="summaryTotal">Rp 0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <form id="bettingForm">
+                    <div class="input-group">
+                        <label for="catatan">Catatan (Opsional)</label>
+                        <input type="text" id="catatan" placeholder="Tambahkan catatan atau keterangan">
+                    </div>
+
+                    <div class="button-group-betting">
+                        <button type="button" class="btn-betting btn-back" id="kembaliBtn">⬅️ Kembali</button>
+                        <button type="submit" class="btn-betting btn-submit">💾 Simpan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let bettingDataLoaded = null;
+
+        // Ambil data dari localStorage
+        function loadBettingData() {
+            const bettingData = localStorage.getItem('bettingData');
+            if (!bettingData) {
+                showEmptyState();
+                return;
+            }
+
+            bettingDataLoaded = JSON.parse(bettingData);
+            displayResults(bettingDataLoaded);
+            updateBetTypeDisplay();
+        }
+
+        // Tampilkan hasil kombinasi
+        function displayResults(data) {
+            const resultsGrid = document.getElementById('resultsGrid');
+            resultsGrid.innerHTML = '';
+
+            const resultTypes = [
+                { key: 'result2D', label: '2D', symbol: '♠️' },
+                { key: 'result3D', label: '3D', symbol: '♥️' },
+                { key: 'result4D', label: '4D', symbol: '♦️' }
+            ];
+
+            resultTypes.forEach(type => {
+                if (data[type.key]) {
+                    const numbers = data[type.key];
+                    const count = numbers.split('*').length;
+                    
+                    const card = document.createElement('div');
+                    card.className = 'result-card';
+                    card.innerHTML = `
+                        <h3>${type.symbol} ${type.label}</h3>
+                        <div class="result-numbers">${numbers}</div>
+                        <div class="result-count">Total: ${count} kombinasi</div>
+                    `;
+                    resultsGrid.appendChild(card);
+                }
+            });
+        }
+
+        // Generate betting output
+        function updateBetOutput() {
+            if (!bettingDataLoaded) return;
+
+            const check2D = document.getElementById('checkBet2D').checked;
+            const check3D = document.getElementById('checkBet3D').checked;
+            const check4D = document.getElementById('checkBet4D').checked;
+
+            const bet2D = (check2D ? document.getElementById('bet2D').value : '0') || '0';
+            const bet3D = (check3D ? document.getElementById('bet3D').value : '0') || '0';
+            const bet4D = (check4D ? document.getElementById('bet4D').value : '0') || '0';
+
+            const result2D = bettingDataLoaded.result2D;
+            const result3D = bettingDataLoaded.result3D;
+            const result4D = bettingDataLoaded.result4D;
+
+            let betOutput = [];
+
+            // Calculate totals for each type (only if checked)
+            const total2D = (check2D && result2D) ? result2D.split('*').length : 0;
+            const total3D = (check3D && result3D) ? result3D.split('*').length : 0;
+            const total4D = (check4D && result4D) ? result4D.split('*').length : 0;
+
+            const nominalPerKomb2D = (check2D ? parseInt(bet2D) : 0) || 0;
+            const nominalPerKomb3D = (check3D ? parseInt(bet3D) : 0) || 0;
+            const nominalPerKomb4D = (check4D ? parseInt(bet4D) : 0) || 0;
+
+            const totalNominal2D = total2D * nominalPerKomb2D;
+            const totalNominal3D = total3D * nominalPerKomb3D;
+            const totalNominal4D = total4D * nominalPerKomb4D;
+            const totalNominal = totalNominal2D + totalNominal3D + totalNominal4D;
+
+            if (check2D && result2D && nominalPerKomb2D > 0) {
+                betOutput.push(`${result2D}#${bet2D}`);
+            }
+            if (check3D && result3D && nominalPerKomb3D > 0) {
+                betOutput.push(`${result3D}#${bet3D}`);
+            }
+            if (check4D && result4D && nominalPerKomb4D > 0) {
+                betOutput.push(`${result4D}#${bet4D}`);
+            }
+
+            const outputText = betOutput.join('+');
+            document.getElementById('betOutput').textContent = outputText;
+
+            // Update summary
+            document.getElementById('summary2D').textContent = 
+                `${total2D} × Rp ${nominalPerKomb2D.toLocaleString('id-ID')} = Rp ${totalNominal2D.toLocaleString('id-ID')}`;
+            document.getElementById('summary3D').textContent = 
+                `${total3D} × Rp ${nominalPerKomb3D.toLocaleString('id-ID')} = Rp ${totalNominal3D.toLocaleString('id-ID')}`;
+            document.getElementById('summary4D').textContent = 
+                `${total4D} × Rp ${nominalPerKomb4D.toLocaleString('id-ID')} = Rp ${totalNominal4D.toLocaleString('id-ID')}`;
+            document.getElementById('summaryTotal').textContent = 
+                `Rp ${totalNominal.toLocaleString('id-ID')}`;
+        }
+
+        // Tampilkan kondisi kosong
+        function showEmptyState() {
+            const resultsGrid = document.getElementById('resultsGrid');
+            resultsGrid.innerHTML = `
+                <div class="empty-state" style="grid-column: 1/-1;">
+                    <h2>❌ Tidak Ada Data Kombinasi</h2>
+                    <p>Silakan kembali dan buat kombinasi terlebih dahulu</p>
+                    <button type="button" class="btn btn-primary" onclick="kembali()">Kembali ke Racik</button>
+                </div>
+            `;
+        }
+
+        // Tombol kembali
+        document.getElementById('kembaliBtn').addEventListener('click', kembali);
+        function kembali() {
+            window.location.href = 'index.html';
+        }
+
+        // Checkbox event listeners untuk hide/show rows dan update output
+        function updateBetTypeDisplay() {
+            const check2D = document.getElementById('checkBet2D').checked;
+            const check3D = document.getElementById('checkBet3D').checked;
+            const check4D = document.getElementById('checkBet4D').checked;
+
+            // Show/hide rows based on checkbox
+            document.getElementById('row2D').style.display = check2D ? 'grid' : 'none';
+            document.getElementById('row3D').style.display = check3D ? 'grid' : 'none';
+            document.getElementById('row4D').style.display = check4D ? 'grid' : 'none';
+
+            // Update output
+            updateBetOutput();
+        }
+
+        document.getElementById('checkBet2D').addEventListener('change', updateBetTypeDisplay);
+        document.getElementById('checkBet3D').addEventListener('change', updateBetTypeDisplay);
+        document.getElementById('checkBet4D').addEventListener('change', updateBetTypeDisplay);
+
+        // Bet input listeners
+        document.getElementById('bet2D').addEventListener('change', updateBetOutput);
+        document.getElementById('bet2D').addEventListener('input', updateBetOutput);
+        document.getElementById('bet3D').addEventListener('change', updateBetOutput);
+        document.getElementById('bet3D').addEventListener('input', updateBetOutput);
+        document.getElementById('bet4D').addEventListener('change', updateBetOutput);
+        document.getElementById('bet4D').addEventListener('input', updateBetOutput);
+
+        // Handle form submit
+        document.getElementById('bettingForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const check2D = document.getElementById('checkBet2D').checked;
+            const check3D = document.getElementById('checkBet3D').checked;
+            const check4D = document.getElementById('checkBet4D').checked;
+
+            // Validasi minimal ada 1 checkbox yang dipilih
+            if (!check2D && !check3D && !check4D) {
+                alert('Silakan pilih minimal 1 jenis bet (2D, 3D, atau 4D)!');
+                return;
+            }
+
+            const bet2D = document.getElementById('bet2D').value || '0';
+            const bet3D = document.getElementById('bet3D').value || '0';
+            const bet4D = document.getElementById('bet4D').value || '0';
+            const catatan = document.getElementById('catatan').value;
+
+            // Hitung total kombinasi dan nominal
+            const total2D = (check2D && bettingDataLoaded.result2D) ? bettingDataLoaded.result2D.split('*').length : 0;
+            const total3D = (check3D && bettingDataLoaded.result3D) ? bettingDataLoaded.result3D.split('*').length : 0;
+            const total4D = (check4D && bettingDataLoaded.result4D) ? bettingDataLoaded.result4D.split('*').length : 0;
+
+            const totalNominal2D = total2D * (check2D ? parseInt(bet2D) : 0);
+            const totalNominal3D = total3D * (check3D ? parseInt(bet3D) : 0);
+            const totalNominal4D = total4D * (check4D ? parseInt(bet4D) : 0);
+            const totalNominal = totalNominal2D + totalNominal3D + totalNominal4D;
+
+            // Dapatkan betting data output
+            const betOutput = document.getElementById('betOutput').textContent;
+
+            if (!betOutput) {
+                alert('Belum ada data betting. Silakan isi nominal terlebih dahulu!');
+                return;
+            }
+
+            // Ambil history dari localStorage atau buat baru
+            let bettingHistory = [];
+            const existingHistory = localStorage.getItem('bettingHistory');
+            if (existingHistory) {
+                bettingHistory = JSON.parse(existingHistory);
+            }
+
+            // Buat entry baru
+            const newBetEntry = {
+                betData: betOutput,
+                catatan: catatan || '',
+                totalNominal: totalNominal,
+                bet2D: parseInt(bet2D),
+                bet3D: parseInt(bet3D),
+                bet4D: parseInt(bet4D),
+                total2D: total2D,
+                total3D: total3D,
+                total4D: total4D,
+                timestamp: new Date().toISOString(),
+                id: Date.now()
+            };
+
+            // Tambah ke history
+            bettingHistory.push(newBetEntry);
+            localStorage.setItem('bettingHistory', JSON.stringify(bettingHistory));
+
+            // Tampilkan confirmation
+            alert(`✅ Data Bet Berhasil Disimpan!\n\nNominal: Rp ${totalNominal.toLocaleString('id-ID')}\nWaktu: ${new Date().toLocaleString('id-ID')}`);
+
+            // Bersihkan localStorage dan kembali
+            localStorage.removeItem('bettingData');
+            window.location.href = 'index.html';
+        });
+
+        // Load data saat halaman dibuka
+        loadBettingData();
+    </script>
+
+    <!-- Service Worker Registration for PWA -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('service-worker.js');
+            });
+        }
+    </script>
+</body>
+</html>

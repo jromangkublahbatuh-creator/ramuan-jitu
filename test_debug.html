@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug JP Match</title>
+</head>
+<body>
+    <h1>Debug Data</h1>
+    <button onclick="showData()">Show localStorage Data</button>
+    <button onclick="testMatch()">Test Match Function</button>
+    <pre id="output"></pre>
+    
+    <script>
+        function showData() {
+            const betting = JSON.parse(localStorage.getItem('bettingHistory') || '[]');
+            const result = JSON.parse(localStorage.getItem('resultHistory') || '[]');
+            
+            let output = '=== BETTING HISTORY ===\n';
+            betting.forEach((b, i) => {
+                output += `\n[${i}] ${b.timestamp}\n`;
+                output += `betData: ${b.betData}\n`;
+                output += `Date extracted: ${new Date(b.timestamp).toISOString().split('T')[0]}\n`;
+            });
+            
+            output += '\n\n=== RESULT HISTORY ===\n';
+            result.forEach((r, i) => {
+                output += `\n[${i}] ${r.date}\n`;
+                output += `number: ${r.number}\n`;
+            });
+            
+            document.getElementById('output').textContent = output;
+        }
+        
+        function testMatch() {
+            const betting = JSON.parse(localStorage.getItem('bettingHistory') || '[]');
+            const result = JSON.parse(localStorage.getItem('resultHistory') || '[]');
+            
+            let output = '=== MATCH TEST ===\n\n';
+            
+            result.forEach(r => {
+                output += `Result: ${r.date} - ${r.pool} ${r.number}\n`;
+                
+                const result2D = r.number.slice(-2);
+                const result3D = r.number.slice(-3);
+                const result4D = r.number;
+                
+                output += `  2D: ${result2D}, 3D: ${result3D}, 4D: ${result4D}\n`;
+                
+                betting.forEach((b, idx) => {
+                    const betYear = new Date(b.timestamp).getFullYear();
+                    const betMonth = String(new Date(b.timestamp).getMonth() + 1).padStart(2, '0');
+                    const betDay = String(new Date(b.timestamp).getDate()).padStart(2, '0');
+                    const betDate = `${betYear}-${betMonth}-${betDay}`;
+                    
+                    output += `\n  Checking bet #${betting.length - idx} (date: ${betDate})\n`;
+                    output += `    Data: ${b.betData}\n`;
+                    
+                    if (betDate === r.date) {
+                        output += `    ✓ Date match!\n`;
+                        
+                        const typeGroups = b.betData.split('+');
+                        let matched = false;
+                        
+                        typeGroups.forEach((group, gi) => {
+                            const numbersOnlyPart = group.split('#')[0];
+                            const betNumbers = numbersOnlyPart.split('*').map(n => n.trim()).filter(n => n);
+                            output += `      Group ${gi}: ${betNumbers.join(', ')}\n`;
+                            
+                            betNumbers.forEach(betNum => {
+                                if (betNum === result2D || betNum === result3D || betNum === result4D) {
+                                    output += `        ✓✓ MATCH: ${betNum}\n`;
+                                    matched = true;
+                                }
+                            });
+                        });
+                        
+                        if (!matched) output += `    ✗ No number match\n`;
+                    } else {
+                        output += `    ✗ Date no match (bet: ${betDate} vs result: ${r.date})\n`;
+                    }
+                });
+                
+                output += '\n---\n';
+            });
+            
+            document.getElementById('output').textContent = output;
+        }
+    </script>
+</body>
+</html>

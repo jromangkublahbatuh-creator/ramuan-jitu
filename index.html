@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Aplikasi web untuk generate angka acak 2D, 3D, 4D dengan fitur betting dan tracking hasil keluaran">
+    <meta name="theme-color" content="#667eea">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Ramuan Jitu">
+    <title>Ramuan Jitu Anti Kacuak - 2D, 3D, 4D & Racik</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%23667eea' width='192' height='192'/><text x='50%' y='50%' font-size='80' font-weight='bold' fill='white' text-anchor='middle' dy='.3em'>🎰</text></svg>">
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h1>🎲 Ramuan Jitu Anti Kacuak</h1>
+            
+            <!-- Tab Navigation -->
+            <div class="tab-navigation">
+                <button class="tab-btn active" data-tab="tab-generator234d">🎲 Generator 234D</button>
+                <button class="tab-btn" data-tab="tab-racik">Racik 234D</button>
+                <button class="tab-btn" data-tab="tab-result">🎯 Result</button>
+                <button class="tab-btn" data-tab="tab-riwayat-bet">📊 Riwayat Bet</button>
+            </div>
+            
+            <!-- Tab Generator 234D - Combined -->
+            <div id="tab-generator234d" class="tab-content active">
+                <div class="generator-container">
+                    <!-- Generator 2D -->
+                    <div class="generator-card">
+                        <p class="generator-subtitle">2D - Angka Acak 00-99</p>
+                        
+                        <div class="display-box">
+                            <div class="random-number" id="randomNumber2D">#</div>
+                        </div>
+                        
+                        <div class="button-group">
+                            <button class="btn btn-primary" id="generateBtn2D">Generate</button>
+                            <button class="btn btn-secondary" id="generateMultipleBtn2D">Generate 5</button>
+                            <button class="btn btn-danger" id="resetBtn2D">Reset</button>
+                        </div>
+                        
+                        <div class="history-section">
+                            <h2>📋 Riwayat Angka</h2>
+                            <div class="history-list" id="historyList2D">
+                                <p class="empty-message">Belum ada riwayat</p>
+                            </div>
+                        </div>
+                        
+                        <div class="stats">
+                            <span>Total Generated: <strong id="totalCount2D">0</strong></span>
+                        </div>
+                    </div>
+
+                    <!-- Generator 3D -->
+                    <div class="generator-card">
+                        <p class="generator-subtitle">3D - Angka Acak 000-999</p>
+                        
+                        <div class="display-box">
+                            <div class="random-number" id="randomNumber3D">#</div>
+                        </div>
+                        
+                        <div class="button-group">
+                            <button class="btn btn-primary" id="generateBtn3D">Generate</button>
+                            <button class="btn btn-secondary" id="generateMultipleBtn3D">Generate 5</button>
+                            <button class="btn btn-danger" id="resetBtn3D">Reset</button>
+                        </div>
+                        
+                        <div class="history-section">
+                            <h2>📋 Riwayat Angka</h2>
+                            <div class="history-list" id="historyList3D">
+                                <p class="empty-message">Belum ada riwayat</p>
+                            </div>
+                        </div>
+                        
+                        <div class="stats">
+                            <span>Total Generated: <strong id="totalCount3D">0</strong></span>
+                        </div>
+                    </div>
+
+                    <!-- Generator 4D -->
+                    <div class="generator-card">
+                        <p class="generator-subtitle">4D - Angka Acak 0000-9999</p>
+                        
+                        <div class="display-box">
+                            <div class="random-number" id="randomNumber4D">#</div>
+                        </div>
+                        
+                        <div class="button-group">
+                            <button class="btn btn-primary" id="generateBtn4D">Generate</button>
+                            <button class="btn btn-secondary" id="generateMultipleBtn4D">Generate 5</button>
+                            <button class="btn btn-danger" id="resetBtn4D">Reset</button>
+                        </div>
+                        
+                        <div class="history-section">
+                            <h2>📋 Riwayat Angka</h2>
+                            <div class="history-list" id="historyList4D">
+                                <p class="empty-message">Belum ada riwayat</p>
+                            </div>
+                        </div>
+                        
+                        <div class="stats">
+                            <span>Total Generated: <strong id="totalCount4D">0</strong></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tab Racik 234D -->
+            <div id="tab-racik" class="tab-content">
+                <p class="subtitle">Racik Kombinasi: As • Kop • Kepala • Ekor</p>
+                
+                <div class="racik-container">
+                    <!-- Field As -->
+                    <div class="racik-field">
+                        <h3>⚫ As</h3>
+                        <input type="text" id="racikAsInput" class="racik-input" placeholder="Masukkan digit..." maxlength="9">
+                        <div class="racik-display">
+                            <span class="racik-numbers" id="racikAs"></span>
+                        </div>
+                        <button class="btn btn-primary" id="racikAsGenerateBtn">Generate As</button>
+                        <button class="btn btn-danger btn-small" id="racikAsClearBtn">Clear</button>
+                    </div>
+                    
+                    <!-- Field Kop -->
+                    <div class="racik-field">
+                        <h3>🔴 Kop</h3>
+                        <input type="text" id="racikKopInput" class="racik-input" placeholder="Masukkan digit..." maxlength="9">
+                        <div class="racik-display">
+                            <span class="racik-numbers" id="racikKop"></span>
+                        </div>
+                        <button class="btn btn-primary" id="racikKopGenerateBtn">Generate Kop</button>
+                        <button class="btn btn-danger btn-small" id="racikKopClearBtn">Clear</button>
+                    </div>
+                    
+                    <!-- Field Kepala -->
+                    <div class="racik-field">
+                        <h3>🟡 Kepala</h3>
+                        <input type="text" id="racikKepalInput" class="racik-input" placeholder="Masukkan digit..." maxlength="9">
+                        <div class="racik-display">
+                            <span class="racik-numbers" id="racikKepala"></span>
+                        </div>
+                        <button class="btn btn-primary" id="racikKepalGenerateBtn">Generate Kepala</button>
+                        <button class="btn btn-danger btn-small" id="racikKepalClearBtn">Clear</button>
+                    </div>
+                    
+                    <!-- Field Ekor -->
+                    <div class="racik-field">
+                        <h3>🟢 Ekor</h3>
+                        <input type="text" id="racikEkorInput" class="racik-input" placeholder="Masukkan digit..." maxlength="9">
+                        <div class="racik-display">
+                            <span class="racik-numbers" id="racikEkor"></span>
+                        </div>
+                        <button class="btn btn-primary" id="racikEkorGenerateBtn">Generate Ekor</button>
+                        <button class="btn btn-danger btn-small" id="racikEkorClearBtn">Clear</button>
+                    </div>
+                </div>
+                
+                <div class="racik-result">
+                    <h3>📊 Hasil Kombinasi</h3>
+                    <div class="result-box">
+                        <p><strong>2D:</strong> <span id="racikResult2D" class="result-value">-</span></p>
+                        <p><strong>3D:</strong> <span id="racikResult3D" class="result-value">-</span></p>
+                        <p><strong>4D:</strong> <span id="racikResult4D" class="result-value">-</span></p>
+                    </div>
+                    <button class="btn btn-secondary" id="racikProcessBtn">Proses</button>
+                    <button class="btn btn-success" id="racikPasangBtn" style="display: none;">💰 Pasang</button>
+                </div>
+            </div>
+
+            <!-- Tab Result -->
+            <div id="tab-result" class="tab-content">
+                <p class="subtitle">Pencatatan Hasil Keluaran</p>
+                
+                <div class="result-input-section">
+                    <h3>📝 Catat Hasil Keluaran</h3>
+                    
+                    <div class="result-form-group">
+                        <div class="result-form-row">
+                            <div class="result-form-field">
+                                <label for="resultDate">Tanggal</label>
+                                <input type="date" id="resultDate" class="result-form-input">
+                            </div>
+                            
+                            <div class="result-form-field">
+                                <label for="resultPool">Pool</label>
+                                <select id="resultPool" class="result-form-input">
+                                    <option value="">-- Pilih Pool --</option>
+                                    <option value="Sydney">Sydney</option>
+                                    <option value="SGP">SGP</option>
+                                    <option value="TW">TW</option>
+                                    <option value="HK">HK</option>
+                                </select>
+                            </div>
+                            
+                            <div class="result-form-field">
+                                <label for="resultNumber">Hasil</label>
+                                <input type="text" id="resultNumber" class="result-form-input" placeholder="00, 000, 0000" maxlength="4" inputmode="numeric" pattern="[0-9]*">
+                            </div>
+                        </div>
+
+                        <div class="result-button-group">
+                            <button class="btn btn-primary" id="saveResultBtn">💾 Simpan Result</button>
+                            <button class="btn btn-secondary" id="clearResultFormBtn">🗑️ Reset Form</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="result-list-section">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <h3>📊 Daftar Hasil Keluaran</h3>
+                        <button class="btn-clear-all-results" id="clearAllResultsBtn" style="display: none;">🗑️ Hapus Semua</button>
+                    </div>
+                    <div class="result-list" id="resultList">
+                        <p class="empty-message">Belum ada hasil yang dicatat</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab Riwayat Bet -->
+            <div id="tab-riwayat-bet" class="tab-content">
+                <p class="subtitle">Riwayat Bet</p>
+                
+                <div class="history-section">
+                    <h2>📊 Daftar Bet</h2>
+                    <div class="betting-history-list" id="bettingHistoryList">
+                        <p class="empty-message">Belum ada riwayat betting</p>
+                    </div>
+                </div>
+
+                <div class="stats" style="margin-top: 20px;">
+                    <button class="btn btn-danger" id="clearBettingHistoryBtn">🗑️ Hapus Semua Riwayat</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+    
+    <!-- Service Worker Registration for PWA -->
+    <script>
+        // Register service worker for offline support and installability
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('service-worker.js')
+                    .then((registration) => {
+                        console.log('Service Worker registered successfully:', registration);
+                    })
+                    .catch((error) => {
+                        console.log('Service Worker registration failed:', error);
+                    });
+            });
+        }
+
+        // Handle app installation prompt (for browsers that support it)
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            // Show install button/toast if needed
+            console.log('App can be installed');
+        });
+
+        // Handle installation
+        window.addEventListener('appinstalled', () => {
+            console.log('App was installed');
+            if (deferredPrompt) {
+                deferredPrompt = null;
+            }
+        });
+    </script>
+</body>
+</html>
